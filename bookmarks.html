@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<br>
+<div class="container ">
+    <div class="panel-group" id="">
+        <div class="panel panel-info panel-md">
+            <div class="panel-heading accordion-toggle question-toggle" data-toggle="collapse" aria-expanded="true">
+                <h4 class="panel-title">
+
+                </h4>
+            </div>
+            <div class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+    </div>
+                    %for car in cars:
+                        <h1>{{car}}</h1>
+                    <a href="/cars/dell-from-bookmark/{{car}}">
+            <button class="btn btn-info">
+                delete
+            </button>
+        </a>
+                    %end
+    <div class="container">
+        <a href="/cars/">
+            <button class="btn btn-info">
+                Go back
+            </button>
+        </a>
+    </div>
+    <br>
+</div>
+
+</body>
+</html>
