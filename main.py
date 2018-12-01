@@ -83,4 +83,4 @@ def get_cars():
 #     return template('error408.html')
 #
 if __name__ == '__main__':
-    run(host='localhost', port=8888, reloader=True, debug=True)
+    run(host='0.0.0.0', port=8888, reloader=True, debug=True)
