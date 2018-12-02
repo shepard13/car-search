@@ -1,3 +1,8 @@
 # PyCharm IDE files
-.idea
-data.json
+/.idea
+
+# Car database snapshot
+/data.json
+
+# Database files
+/docker/db/data

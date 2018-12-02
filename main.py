@@ -1,6 +1,8 @@
 import json
-from bottle import run, get, error, request, template
+from bottle import run, get, error, request, template, default_app
+from paste import httpserver
 
+application = default_app()
 
 def get_file_content():
     with open('data.json', 'r') as f:
@@ -82,5 +84,6 @@ def get_cars():
 # def error408(error):
 #     return template('error408.html')
 #
+
 if __name__ == '__main__':
-    run(host='0.0.0.0', port=8888, reloader=True, debug=True)
+    httpserver.serve(application, host='0.0.0.0', port=80)
