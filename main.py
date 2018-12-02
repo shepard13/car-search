@@ -1,8 +1,15 @@
 import json
 from bottle import run, get, error, request, template, default_app
 from paste import httpserver
+import psycopg2
 
 application = default_app()
+conn = psycopg2.connect("dbname=car-search user=root password=Ek9z32CDUg5xXOmoLYdo host=db")
+cur = conn.cursor()
+cur.execute("""SELECT * from "cars" """)
+rows = cur.fetchall()
+print(rows)
+
 
 def get_file_content():
     with open('data.json', 'r') as f:
@@ -12,9 +19,9 @@ def get_file_content():
     return datastore
 
 
-def get_car(datastore, number):
+def get_car(rows, number):
     cars = []
-    for car in datastore:
+    for car in rows:
         if number in car['n']:
             cars.append(car)
     return cars
@@ -70,8 +77,7 @@ def show_bookmarks():
 @get('/cars/get_cars/')
 def get_cars():
     number = request.query.number
-    datastore = get_file_content()
-    cars = get_car(datastore, number)
+    cars = get_car(rows, number)
     return template('result_of_search.html', cars=cars)
 
 

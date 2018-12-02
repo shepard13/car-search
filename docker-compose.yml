@@ -8,6 +8,8 @@ services:
       - ./:/opt/car-search
     depends_on:
       - "db"
+    environment:
+      PYTHONUNBUFFERED: 0
   db:
     image: postgres:11.1
     volumes:
