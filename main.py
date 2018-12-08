@@ -1,77 +1,79 @@
 import json
 from bottle import run, get, error, request, template, default_app
 from paste import httpserver
+import psycopg2
 
 application = default_app()
 
-def get_file_content():
-    with open('data.json', 'r') as f:
-        cont = f.read()
-        datastore = json.loads(cont)
+connection = psycopg2.connect(dbname='car-search',
+                              user='root',
+                              password='Ek9z32CDUg5xXOmoLYdo',
+                              host='db',
+                              port='5432')
 
-    return datastore
-
-
-def get_car(datastore, number):
-    cars = []
-    for car in datastore:
-        if number in car['n']:
-            cars.append(car)
-    return cars
+cursor = connection.cursor()
 
 
-def delite_from_bookmark(number):
-    bookmark_list = read_from_bookmark()
-    for i, car in enumerate(bookmark_list):
-        if car['n'] == number:
-            bookmark_list.pop(i)
+def db_get_cars(number):
+    # TODO: SQL escaping
+    cursor.execute(f"""SELECT * FROM public.cars WHERE "plate-number" LIKE '%{number}%';""")
+
+    return cursor.fetchall()
 
 
-def write_to_bookmark(bookmark):
-    with open('bookmark.json', 'w') as data_file:
-        json.dump(bookmark, data_file)
+def db_get_bookmarked_cars():
+    cursor.execute("""SELECT * FROM public.cars WHERE "bookmarked" IS TRUE;""")
+
+    return cursor.fetchall()
 
 
-def read_from_bookmark():
-    with open('bookmark.json') as data_file:
-        cars = json.load(data_file)
+def db_add_bookmark(plate_number):
+    cursor.execute("""UPDATE public.cars SET "bookmarked" = TRUE WHERE "plate-number" = %s;""", (plate_number,))
 
-    return cars
+    connection.commit()
 
 
-# {'br': 'ПА  004', 'y': '2015', 'col': 'ЗЕЛЕНИЙ', 'n': 'АЕ3999ХМ'}
+def db_delete_bookmark(plate_number):
+    cursor.execute("""UPDATE public.cars SET "bookmarked" = FALSE WHERE "plate-number" = %s;""", (plate_number,))
+
+    connection.commit()
+
+
 @get('/cars/')
 def search():
     return template('index.html')
 
 
-@get('/cars/add-bookmark/<c>')
-def add_bookmark(c):
-    bookmark_list = read_from_bookmark()
-    bookmark_list.append(c)
-    write_to_bookmark(bookmark_list)
-    return template('bookmarks.html', cars=bookmark_list)
+@get('/cars/add-bookmark/')
+def add_bookmark():
+    number = request.query.plate_number
+    db_add_bookmark(number)
 
-@get('/cars/dell-from-bookmark/<c>')
-def delite_from_bookmark(c):
-    bookmark_list = read_from_bookmark()
-    for i, car in enumerate(bookmark_list):
-        if car['n'] in c['n']:
-            bookmark_list.pop(i)
-    return template('bookmarks.html', cars=bookmark_list)
+    cars = db_get_bookmarked_cars()
+    return template('bookmarks.html', cars=cars)
+
+
+@get('/cars/dell-from-bookmark/')
+def delete_from_bookmark():
+    number = request.query.plate_number
+    db_delete_bookmark(number)
+    cars = db_get_bookmarked_cars()
+
+    return template('bookmarks.html', cars=cars)
 
 
 @get('/cars/bookmarks/')
 def show_bookmarks():
-    cars = read_from_bookmark()
+    cars = db_get_bookmarked_cars()
     return template('bookmarks.html', cars=cars)
 
 
 @get('/cars/get_cars/')
 def get_cars():
     number = request.query.number
-    datastore = get_file_content()
-    cars = get_car(datastore, number)
+
+    cars = db_get_cars(number)
+
     return template('result_of_search.html', cars=cars)
 
 
