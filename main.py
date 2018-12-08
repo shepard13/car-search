@@ -59,6 +59,7 @@ def add_bookmark(c):
     write_to_bookmark(bookmark_list)
     return template('bookmarks.html', cars=bookmark_list)
 
+
 @get('/cars/dell-from-bookmark/<c>')
 def delite_from_bookmark(c):
     bookmark_list = read_from_bookmark()

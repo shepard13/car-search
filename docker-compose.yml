@@ -10,6 +10,7 @@ services:
       - "db"
     environment:
       PYTHONUNBUFFERED: 0
+    restart: unless-stopped
   db:
     image: postgres:11.1
     volumes:
