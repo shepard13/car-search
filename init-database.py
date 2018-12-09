@@ -30,7 +30,6 @@ connection.commit()
 print('Checking if data has been already imported...')
 
 cursor.execute("""SELECT COUNT(*) FROM public.cars;""")
-
 result = cursor.fetchone()
 if result[0] > 0:
     print('Database has been already initialized, skipping import...')
@@ -38,30 +37,31 @@ if result[0] > 0:
     connection.close()
     quit(0)
 
+else:
 
-print('Reading data...')
+    print('Reading data...')
 
-file = open('data.json', 'r')
-cont = file.read()
-data = json.loads(cont)
+    file = open('data.json', 'r')
+    cont = file.read()
+    data = json.loads(cont)
 
-print('Importing data...')
-for car in data:
-    plateNumber = car['n']
-    year = car['y']
-    brand = car['br']
-    color = car['col']
+    print('Importing data...')
+    for car in data:
+        plateNumber = car['n']
+        year = car['y']
+        brand = car['br']
+        color = car['col']
 
-    print(f'inserting car {plateNumber}...')
+        print(f'inserting car {plateNumber}...')
 
-    cursor.execute("""
-        INSERT INTO public.cars ("plate-number", "brand", "year", "color") VALUES (%s, %s, %s, %s);    
-    """, (plateNumber, brand, year, color))
+        cursor.execute("""
+            INSERT INTO public.cars ("plate-number", "brand", "year", "color") VALUES (%s, %s, %s, %s);    
+        """, (plateNumber, brand, year, color))
 
-    connection.commit()
+        connection.commit()
 
 
-cursor.close()
-connection.close()
+    cursor.close()
+    connection.close()
 
-print('Database initialized...')
+    print('Database initialized...')

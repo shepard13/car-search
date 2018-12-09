@@ -6,15 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Bookmarks</title>
-
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -69,13 +66,8 @@
                 <td>{{elem[2]}}</td>
                 <td>{{elem[3]}}</td>
                 <td class="text-center">
-                    %if elem[4] == None:
-                    <a class='btn btn-info btn-xs' href="/cars/add-bookmark/?plate_number={{elem[3]}}"><span
-                            class="glyphicon glyphicon-edit"></span>Edit</a>
-                    %elif elem[4] == True:
-                    <a href="/cars/dell-from-bookmark/?plate_number={{elem[3]}}" class="btn btn-danger btn-xs"><span
+                    <a href="/cars/dell-from-bookmarks/?plate_number={{elem[3]}}" class="btn btn-danger btn-xs"><span
                             class="glyphicon glyphicon-remove"></span> Del</a>
-                    %end
                 </td>
             </tr>
             %end

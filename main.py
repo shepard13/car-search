@@ -1,4 +1,3 @@
-import json
 from bottle import run, get, error, request, template, default_app
 from paste import httpserver
 import psycopg2
@@ -13,9 +12,9 @@ connection = psycopg2.connect(dbname='car-search',
 
 cursor = connection.cursor()
 
+# Working with database...
 
 def db_get_cars(number):
-    # TODO: SQL escaping
     cursor.execute(f"""SELECT * FROM public.cars WHERE "plate-number" LIKE '%{number}%';""")
 
     return cursor.fetchall()
@@ -62,7 +61,7 @@ def dell_bookmark():
     return template('templates/search-result.html', cars=cars, search=search)
 
 
-@get('/cars/dell-from-bookmark/')
+@get('/cars/dell-from-bookmarks/')
 def delete_from_bookmark():
     number = request.query.plate_number
     db_delete_bookmark(number)
